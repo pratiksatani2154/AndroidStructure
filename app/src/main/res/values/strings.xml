@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">DemoPermission</string>
+    <string name="str_something_wrong">Something went wrong. Please try again later.</string>
+    <string name="str_no_internet">No internet connection available. Please try again later.</string>
+    <string name="str_server_not_responding">Server is not responding. Please try again later.</string>
+    <string name="str_connection_timeout">Connection Timeout</string>
+    <string name="str_parse_error">Server error please take a while</string>
+</resources>
