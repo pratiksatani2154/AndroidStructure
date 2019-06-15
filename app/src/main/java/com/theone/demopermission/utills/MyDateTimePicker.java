@@ -6,10 +6,9 @@ import android.content.Context;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import com.theone.demopermission.interfaces.OnDateTimeSetListener;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Hemant on 13-06-2019,
@@ -36,7 +35,10 @@ public class MyDateTimePicker implements DatePickerDialog.OnDateSetListener, Tim
     public MyDateTimePicker(Context context) {
         mContext = context;
     }
-
+    public interface OnDateTimeSetListener {
+        void onDateSet(String dateInString, Date date);
+        void onTimeSet(String time);
+    }
     public static MyDateTimePicker getInstance(Context context) {
         if (myDateTimeUtils == null) {
             mContext = context;

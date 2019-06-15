@@ -24,9 +24,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityMainBinding= DataBindingUtil.setContentView(this,R.layout.activity_main);
+        if(!Permission.isPermissionGranted(this,Permission.WRITE_EXTERNAL_STORAGE)||!Permission.isPermissionGranted(this,Permission.READ_CALENDAR)||!Permission.isPermissionGranted(this,Permission.CAMERA)) {
+            Permission.requestPermissions(this, new String[]{Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_CALENDAR, Permission.CAMERA});
+        }
+
         mainViewModel=new MainViewModel(this,activityMainBinding);
         activityMainBinding.setMain(mainViewModel);
-        Permission.requestPermissions(this, new String[]{Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_CALENDAR,Permission.CAMERA});
+
 
 
     }

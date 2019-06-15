@@ -6,16 +6,13 @@ import android.databinding.ObservableField;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Filter;
 
 import com.theone.demopermission.R;
+import com.theone.demopermission.adapter.BindingRecyclerAdapter;
 import com.theone.demopermission.databinding.ActivityMainBinding;
 import com.theone.demopermission.databinding.RawLayoutBinding;
-import com.theone.demopermission.adapter.BindingRecyclerAdapter;
-import com.theone.demopermission.interfaces.OnDateTimeSetListener;
 import com.theone.demopermission.retrofit.RestClient;
-import com.theone.demopermission.utills.DemoApplicationClass;
 import com.theone.demopermission.utills.GlobalUtills;
 import com.theone.demopermission.utills.MyDateTimePicker;
 
@@ -26,11 +23,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MainViewModel extends BaseObservable {
-    ArrayList<String>filteredList=new ArrayList<>();
+    ArrayList<String> filteredList = new ArrayList<>();
     private final Context context;
     private final ActivityMainBinding activityMainBinding;
     private final RestClient restClient;
     public ObservableField<BindingRecyclerAdapter<String, RawLayoutBinding>> adapter = new ObservableField<>();
+
     public MainViewModel(Context context, ActivityMainBinding activityMainBinding) {
         this.context = context;
         this.activityMainBinding = activityMainBinding;
@@ -39,18 +37,18 @@ public class MainViewModel extends BaseObservable {
     }
 
     private void init() {
-        activityMainBinding.rvMain.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
-        String date= GlobalUtills.getCurrentDate(GlobalUtills.DDMMMYYYY1);
+        activityMainBinding.rvMain.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        String date = GlobalUtills.getCurrentDate(GlobalUtills.DDMMMYYYY1);
         try {
-            String formattedDate=GlobalUtills.formatDateFromDateString(GlobalUtills.DDMMMYYYY1,GlobalUtills.EEEDMMMYYYYHHMMSSZ,date);
-            GlobalUtills.showMessage(context,"Current Date is: "+formattedDate,GlobalUtills.LENGTH_LONG);
+            String formattedDate = GlobalUtills.formatDateFromDateString(GlobalUtills.DDMMMYYYY1, GlobalUtills.EEEDMMMYYYYHHMMSSZ, date);
+            GlobalUtills.showMessage(context, "Current Date is: " + formattedDate, GlobalUtills.LENGTH_LONG);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
 
         //todo this is temporary arraylist for the Recycler view you can add your own arraylist with Model class
-        ArrayList<String>s=new ArrayList<>();
+        ArrayList<String> s = new ArrayList<>();
         s.add("Ahmedabad");
         s.add("Surat");
         s.add("Vadodara");
@@ -65,26 +63,26 @@ public class MainViewModel extends BaseObservable {
         s.add("Jamnagar");
         s.add("Amreli");
         setAdapter(s);
-      activityMainBinding.searchedt.addTextChangedListener(new TextWatcher() {
-          @Override
-          public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        activityMainBinding.searchedt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-          }
-
-          @Override
-          public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if(count!=0){
-                adapter.get().getFilter().filter(s);
-            }else {
-                adapter.get().getFilter().filter("");
             }
-          }
 
-          @Override
-          public void afterTextChanged(Editable s) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count != 0) {
+                    adapter.get().getFilter().filter(s);
+                } else {
+                    adapter.get().getFilter().filter("");
+                }
+            }
 
-          }
-      });
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
     }
 
@@ -99,8 +97,8 @@ public class MainViewModel extends BaseObservable {
 
             @Override
             protected void setView(RawLayoutBinding binding, int position) {
-                String str=getItemForPosition(position);
-                binding.textView.setText(""+str);
+                String str = getItemForPosition(position);
+                binding.textView.setText("" + str);
             }
 
             @Override
@@ -147,8 +145,9 @@ public class MainViewModel extends BaseObservable {
             }
         });
     }
-    public void defaultDatePicker(){
-        MyDateTimePicker.getInstance(context).setListener(new OnDateTimeSetListener() {
+
+    public void defaultDatePicker() {
+        MyDateTimePicker.getInstance(context).setListener(new MyDateTimePicker.OnDateTimeSetListener() {
             @Override
             public void onDateSet(String dateInString, Date date) {
 
@@ -160,8 +159,9 @@ public class MainViewModel extends BaseObservable {
             }
         }).showDateDialog(false);
     }
-    public void defaultTimePicker(){
-        MyDateTimePicker.getInstance(context).setListener(new OnDateTimeSetListener() {
+
+    public void defaultTimePicker() {
+        MyDateTimePicker.getInstance(context).setListener(new MyDateTimePicker.OnDateTimeSetListener() {
             @Override
             public void onDateSet(String dateInString, Date date) {
 
@@ -173,7 +173,8 @@ public class MainViewModel extends BaseObservable {
             }
         }).showTimeDialog(false);
     }
-    public void customCalander (){
+
+    public void customCalander() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 10);
 
@@ -182,7 +183,7 @@ public class MainViewModel extends BaseObservable {
         myDateTimePicker.setMaxDate(calendar);
         myDateTimePicker.setPositiveButtonText("okay");
         myDateTimePicker.setNegativeButtonText("no");
-        myDateTimePicker.setListener(new OnDateTimeSetListener() {
+        myDateTimePicker.setListener(new MyDateTimePicker.OnDateTimeSetListener() {
             @Override
             public void onDateSet(String dateInString, Date date) {
 

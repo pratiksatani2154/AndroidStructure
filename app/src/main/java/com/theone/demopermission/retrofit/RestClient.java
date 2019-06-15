@@ -85,11 +85,9 @@ public class RestClient {
         okHttpClientBuilder.writeTimeout(2, TimeUnit.MINUTES);
         okHttpClientBuilder.readTimeout(2, TimeUnit.MINUTES);
 
-//        if (BuildConfig.DEBUG) {
         final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         okHttpClientBuilder.addInterceptor(interceptor);
-//        }
 
         final String token = "Token Type" + " " + "Token";
         if (!TextUtils.isEmpty(token)) {
