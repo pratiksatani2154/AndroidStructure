@@ -1,17 +1,23 @@
 package com.theone.demopermission.utills;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 public class GlobalUtills {
@@ -139,7 +145,60 @@ public class GlobalUtills {
 
     }
 
+    public static final void shareLink(Context context, String link) {
+      try {
+
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.putExtra(Intent.EXTRA_TEXT,link );
+            Intent chooser = new Intent(Intent.ACTION_CHOOSER);
+            chooser.putExtra(Intent.EXTRA_INTENT, share);
+            chooser.putExtra(Intent.EXTRA_TITLE, "Share via");
+            context.startActivity(chooser);
+
+        } catch (Exception ex) {
+            Toast.makeText(context, "No application found to share.", Toast.LENGTH_SHORT).show();
+        }
 
 
+    }
+    public static DisplayMetrics GetDisplayMetrics(Activity context) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        try {
+            context.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+            return displayMetrics;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return displayMetrics;
+    }
+
+    class ForegroundCheckTask extends AsyncTask<Context, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Context... params) {
+            final Context context = params[0].getApplicationContext();
+            return isAppOnForeground(context);
+        }
+
+        private boolean isAppOnForeground(Context context) {
+            ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+            if (appProcesses == null) {
+                return false;
+            }
+            final String packageName = context.getPackageName();
+            for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName.equals(packageName)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    //// Use like this:
+    //boolean foregroud = new ForegroundCheckTask().execute(context).get();
 
 }
